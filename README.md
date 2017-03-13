@@ -1,9 +1,5 @@
-# CTF-Challenges
+# Sheb-Teth
 
-This is a collection of various CTF challenges I have written over the years.
+___Devourer of Souls___
 
-
-
-
-## Sheb-Teth	___Devourer of Souls___
 Counter-Forensic RE Challenge for LayerOne 2017 CTF. 
