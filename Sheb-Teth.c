@@ -1,4 +1,6 @@
+
 #include <stdio.h>
+#include <stdlib.h>
 
 
 /**********************************************************************************************************************
@@ -44,17 +46,33 @@
 // GUID's are 36 chars with dashes. e.g. 4DEF757C-321A-4007-84FE-5AF5EA607BD4
 #define BUFFER_LEN	36
 
-int xor_decrypt_and_compare(char *query, char *cipher, char *key);
-
+// Plain flag, no anti-debug.
 void check_flag_0(char *query);
+
+// Obscured flag, no anti-debug.
 void check_flag_1(char *query);
+
+// Obscured flag, anti-debug w/PTRACE_TRACEME.
 void check_flag_2(char *query);
+
+// Obscured flag, anti-debug w/breakpoint detection, false disassembly, and blind-alley redirection.
 void check_flag_3(char *query);
 
+// Obscured flag, anti-debug w/ptrace()d child process that constructs the flag.
+// Child function for assembling the flag has many false breakpoints to frustrate debugger on the parent.
+// Child assembles flag material that is stored in the elf binary's dead space.
+void check_flag_4(char *query);
+
+// Obscured flag, anti-debug w/default blind-alley runtime altered by child process ptrace()ing parent. 
+// Child points parent to flag material stored in the .text section of the runtime process.
+// Same child as in check_flag_4(). They simply switch roles.
+void check_flag_5(char *query);
+
+
 // This function is itself key material translated to assembly as though it were opcodes. May be interesting to use
-// nested C functions (GNU extension) to place this at the beginning of the check_flag_3() function. Could do 
+// nested C functions (GNU extension) to place this at the beginning of the check_flag_5() function. Could do 
 // interesting things to the static analysis tools.
-// Then at the start of check_flag_3() actual codepath, do an if statement that the compiler wont optimize out that
+// Then at the start of check_flag_5() actual codepath, do an if statement that the compiler wont optimize out that
 // will never be true and call eldritch_function() if it is. e.g. if(*((&argc)++) == NULL)  which is in essence
 // if argv[0] is empty, which it shouldn't ever be, but compiler won't know this. 
 void eldritch_function();
@@ -64,57 +82,71 @@ int main(int argc, char **argv, char **envp){
 
 	// start with a root user check. Warn the user if you aren't running as root then exit().
 
-	printf("hello, world\n");
-
-	return(0);
-}
-
-int xor_decrypt_and_compare(char *query, char *cipher, char *key){
-
+	write(1, ((char *) eldritch_function)+4, 36);
 
 	return(0);
 }
 
 
 void eldritch_function(){
-/*
-	 $ head -c 36 </dev/urandom | ./udcli -att
-	 0000000000000000 90               nop                     
-	 0000000000000001 fb               sti                     
-	 0000000000000002 1c7b             sbb $0x7b, %al          
-	 0000000000000004 7503             jnz 0x9                 
-	 0000000000000006 9ab5c2835401c0   call $0xc001, $0x5483c2b5
-	 000000000000000d 44               inc %esp                
-	 000000000000000e ca8a8f           lret  $0x8f8a           
-	 0000000000000011 a36276cf23       mov %eax, 0x23cf7662    
-	 0000000000000016 3b3e             cmp (%esi), %edi        
-	 0000000000000018 0b39             or (%ecx), %edi         
-	 000000000000001a 7778             ja 0x94                 
-	 000000000000001c 2b4c1ae8         sub -0x18(%edx,%ebx), %ecx
-	 0000000000000020 d7               xlatb                   
-	 0000000000000021 97               xchg %eax, %edi         
-	 0000000000000022 b7d1             mov $0xd1, %bh
- */
 
 
-	// key -> \x90\xfb\x1c\x7b\x75\x03\x9a\xb5\xc2\x83\x54\x01\xc0\x44\xca\x8a\x8f\xa3\x62\x76\xcf\x23\x3b\x3e\x0b\x39\x77\x78\x2b\x4c\x1a\xe8\xd7\x97\xb7\xd1
+	/*
 
-	__asm__ __volitile__("
-			nop
-			sti
-			sbb $0x7b, %%al
-			jnz 0x9
-			call $0xc001, $0x5483c2b5
-			inc %%esp
-			lret  $0x8f8a
-			mov %%eax, 0x23cf7662
-			cmp (%%esi), %%edi
-			or (%%ecx), %%edi
-			ja 0x94
-			sub -0x18(%%edx,%%ebx), %%ecx
-			xlatb
-			xchg %%eax, %%edi
-			mov $0xd1, %%bh
-			");
+		Generate key:
+		head -c 36 /dev/urandom | xxd -p -c 64
+
+		key -> \x1d\x92\x9d\x5f\xaa\xf6\xc4\x83\xad\xed\x61\x9d\xf0\xb2\x17\xd4\x4d\x86\x1a\xfd\x30\xed\x72\x82\x54\xed\x9d\x9f\x3a\xaf\xfa\x01\xe0\xcc\x06\x94
+
+		Then replace nops with key as part of Makefile. :)
+
+		empty@monkey:~/code/Sheb-Teth$ xxd -c 64 -p Sheb-Teth | sed 's/\(90\)\{36\}/1d929d5faaf6c483aded619df0b217d44d861afd30ed728254ed9d9f3aaffa01e0cc0694/' | xxd -p -r >Sheb-Teth.mod
+		empty@monkey:~/code/Sheb-Teth$ chmod 755 Sheb-Teth.mod 
+		empty@monkey:~/code/Sheb-Teth$ ./Sheb-Teth.mod
+
+	*/
+
+	__asm__
+		__volatile__
+		(
+
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 "nop \n\t"
+		 ); 
+
 }
 
