@@ -1,7 +1,5 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-
+#include "common.h"
 
 /**********************************************************************************************************************
  *	
@@ -43,110 +41,95 @@
  *
  **********************************************************************************************************************/
 
-// GUID's are 36 chars with dashes. e.g. 4DEF757C-321A-4007-84FE-5AF5EA607BD4
-#define BUFFER_LEN	36
 
-// Plain flag, no anti-debug.
-void check_flag_0(char *query);
+char *banner_break_0 = "#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.";
+char *welcome_0 = "Welcome to the Sheb-Teth RE challenge.";
+char *welcome_1 = "There are six flags. flag_0, flag_1, ..., flag_5.";
+char *welcome_2 = "Each flag is in a uuid format. (e.g. \"c8da2132-382e-11e7-9862-507b9d8156b4\")";
+char *welcome_3 = "When prompted, enter the flag you would like to test.";
+char *welcome_4 = "This program will tell you which flag it matches, if any.";
+char *welcome_5 = "Enjoy!";
+char *banner_break_1 = ".#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#";
 
-// Obscured flag, no anti-debug.
-void check_flag_1(char *query);
+int main(){
 
-// Obscured flag, anti-debug w/PTRACE_TRACEME.
-void check_flag_2(char *query);
+	// Call sheb teth. Native of death. Invite and tremble.
+	char *welcome = "uln sheb teth  n'ghaoth  sll'ha throd";
 
-// Obscured flag, anti-debug w/breakpoint detection, false disassembly, and blind-alley redirection.
-void check_flag_3(char *query);
+	// ...yet living, [It] sleeps/waits and then acts, we send [our] prayers [to thee], answer [us]!
+	char *prompt = "mglw'nafh fhthagn-ngah cf'ayak 'vulgtmm vugtlag'n";
 
-// Obscured flag, anti-debug w/ptrace()d child process that constructs the flag.
-// Child function for assembling the flag has many false breakpoints to frustrate debugger on the parent.
-// Child assembles flag material that is stored in the elf binary's dead space.
-void check_flag_4(char *query);
+	// Worthless secret.
+	char *bad_flag = "mnahn' r'luh";
 
-// Obscured flag, anti-debug w/default blind-alley runtime altered by child process ptrace()ing parent. 
-// Child points parent to flag material stored in the .text section of the runtime process.
-// Same child as in check_flag_4(). They simply switch roles.
-void check_flag_5(char *query);
+	// Secret of the brotherhood. Invites eternity. Amen.
+	char *good_flag = "r'luh chtenff  sll'ha syha'h  y'hah";
 
+	// Darkn heretic mind. Earthing. <lift spell>
+	char *goodbye_fail = "n'ghft hlirgh lloig  shuggoth  zhro";
 
-// This function is itself key material translated to assembly as though it were opcodes. May be interesting to use
-// nested C functions (GNU extension) to place this at the beginning of the check_flag_5() function. Could do 
-// interesting things to the static analysis tools.
-// Then at the start of check_flag_5() actual codepath, do an if statement that the compiler wont optimize out that
-// will never be true and call eldritch_function() if it is. e.g. if(*((&argc)++) == NULL)  which is in essence
-// if argv[0] is empty, which it shouldn't ever be, but compiler won't know this. 
-void eldritch_function();
+	// Granted crossing wish. <finish spell>
+	char *goodbye_success = "ch'goka gotha  uaaah";
+
+	char *input_buffer;
+	char *tmp_ptr = NULL;
+
+	int success = 0;
 
 
-int main(int argc, char **argv, char **envp){
+//  XXX Left in place for testing eldritch_function() replacement.
+//	write(1, ((char *) eldritch_function)+4, 36);
+//	eldritch_function();
 
-	// start with a root user check. Warn the user if you aren't running as root then exit().
 
-	write(1, ((char *) eldritch_function)+4, 36);
+	if((input_buffer = calloc(BUFFER_LEN + 1, sizeof(char))) == NULL){
+		error(-1, errno, "calloc(%d, %d)", BUFFER_LEN + 1, (int) sizeof(char));
+	}
+
+	printf("\n%s\n", welcome);
+	printf("\n%s\n> ", prompt);
+	if(fgets(input_buffer, BUFFER_LEN + 1, stdin) == NULL){
+		return(-1);
+	}
+	printf("\n");
+
+	tmp_ptr = strchr(input_buffer, '\n');
+	if(tmp_ptr){
+		*tmp_ptr = '\0';
+	}
+
+	if(check_flag_0(input_buffer)){
+		printf("flag 0: Confirmed!\n");
+		success = 1;
+	}else if(check_flag_1(input_buffer)){
+		printf("flag 1: Confirmed!\n");
+		success = 1;
+	}else if(check_flag_2(input_buffer)){
+		printf("flag 2: Confirmed!\n");
+		success = 1;
+	}else if(check_flag_3(input_buffer)){
+		printf("flag 3: Confirmed!\n");
+		success = 1;
+/*
+*/
+/*
+	}else if(check_flag_4(input_buffer)){
+		printf("flag 4: Confirmed!\n");
+		success = 1;
+	}else if(check_flag_5(input_buffer)){
+		printf("flag 5: Confirmed!\n");
+		success = 1;
+*/
+	}
+
+	if(success){
+		printf("\n%s\n", good_flag);
+		printf("%s\n", goodbye_success);
+	}else{
+		printf("\n%s\n", bad_flag);
+		printf("%s\n", goodbye_fail);
+	}
+
 
 	return(0);
 }
-
-
-void eldritch_function(){
-
-
-	/*
-
-		Generate key:
-		head -c 36 /dev/urandom | xxd -p -c 64
-
-		key -> \x1d\x92\x9d\x5f\xaa\xf6\xc4\x83\xad\xed\x61\x9d\xf0\xb2\x17\xd4\x4d\x86\x1a\xfd\x30\xed\x72\x82\x54\xed\x9d\x9f\x3a\xaf\xfa\x01\xe0\xcc\x06\x94
-
-		Then replace nops with key as part of Makefile. :)
-
-		empty@monkey:~/code/Sheb-Teth$ xxd -c 64 -p Sheb-Teth | sed 's/\(90\)\{36\}/1d929d5faaf6c483aded619df0b217d44d861afd30ed728254ed9d9f3aaffa01e0cc0694/' | xxd -p -r >Sheb-Teth.mod
-		empty@monkey:~/code/Sheb-Teth$ chmod 755 Sheb-Teth.mod 
-		empty@monkey:~/code/Sheb-Teth$ ./Sheb-Teth.mod
-
-	*/
-
-	__asm__
-		__volatile__
-		(
-
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 "nop \n\t"
-		 ); 
-
-}
-
