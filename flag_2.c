@@ -8,30 +8,71 @@
 int check_flag_2(char *query){
 
 	//	char *flag_2_plaintext = "9148387e-3835-11e7-954d-ef18177e9fe9";
-	unsigned char flag_2_key[] = {0xab,0x52,0xc2,0x50,0x8b,0x34,0x4a,0x46,0xbf,0x5e,0xef,0x24,0x08,0x0d,0x3c,0x08,0xb8,0xcc,0xf5,0x68,0x0d,0x21,0xb0,0x54,0xcb,0x9d,0x36,0x21,0xac,0x20,0x88,0x60,0x48,0x93,0xdd,0x60};
-	unsigned char flag_2_ciphertext[] = {0x92,0x63,0xf6,0x68,0xb8,0x0c,0x7d,0x23,0x92,0x6d,0xd7,0x17,0x3d,0x20,0x0d,0x39,0xdd,0xfb,0xd8,0x51,0x38,0x15,0xd4,0x79,0xae,0xfb,0x07,0x19,0x9d,0x17,0xbf,0x05,0x71,0xf5,0xb8,0x59};
+	unsigned int flag_2_key_seed = 3426233066;
+	unsigned char flag_2_ciphertext[] = {0x95,0xc5,0xb5,0x15,0xbb,0xd8,0x4b,0x55,0x35,0x03,0x2b,0x40,0x29,0xc3,0xde,0x11,0x91,0x78,0xb0,0x5c,0xe2,0xee,0xb8,0x7f,0xcd,0xa5,0x0b,0x66,0xd7,0xa3,0x73,0x48,0xd7,0xd7,0x74,0x66};
 
 	int match = 0;
 	struct xod *xor_data;
+	int fd;
+	int flag;
 
-	if(ptrace(PTRACE_TRACEME, 0, 1, 0) == -1){
-		printf("You would try to observe this dark ritual, heretic?! Begone!!\n");
-		return(0);
+	// kadishtu ylloig  ->  undersand my own mind
+	char kadishtu_ylloig;
+	
+	/*
+		 Homebrew debugger check. Examine /proc/self/status for the TracerPid variable. If non-zero, we are in a debugger.
+		 No error checking here. If anything goes wrong... decend into madness.
+
+		 We will perform this check in a rather non-straightforward way.
+	*/
+
+	fd = open("/proc/self/status", O_RDONLY);
+
+	// Seven newlines til the TracerPid line.
+	flag = 7;
+	while(flag){
+		read(fd, &kadishtu_ylloig, 1);
+		if(kadishtu_ylloig == '\n'){
+			flag--;
+		}
 	}
+
+	// Find the tab break.
+	flag = 1;
+	while(flag){
+		read(fd, &kadishtu_ylloig, 1);
+		if(kadishtu_ylloig == '\t'){
+			flag--;
+		}
+	}
+
+	// Next character is the leading digit. This will only be nonzero if we are in a debugger.
+	// There are more chars to this digit, but the display is not zero left padded, so there won't
+	// ever be a leading zero unless the entire number itself is zero.
+	read(fd, &kadishtu_ylloig, 1);
+	close(fd);
+
+	// We are being debugged. Decend into madness.
+	if(atoi(&kadishtu_ylloig)){
+		eldritch_function();
+	}
+
 
 	if((xor_data = (struct xod *) calloc(1, sizeof(struct xod))) == NULL){
 		error(-1, errno, "calloc(1, %d)", (int) sizeof(struct xod));
 	}
 
 	xor_data->buf_count = BUFFER_LEN;
-	xor_data->key_buf = flag_2_key;
+	xor_data->seed = flag_2_key_seed;
 	xor_data->ciphertext_buf = flag_2_ciphertext;
 
+	// Doing this as a decrypt + strcmp so the string ends up in memory for the analyst.
+	// In the future we will use xorscura_compare() directly and avoid this.
 	if(xorscura_decrypt(xor_data) == -1){
-		error(-1, errno, "xorscura_decrypt(%lx)", (unsigned long) xor_data);
+		error(-1, errno, "xorscura_compare(%lx)", (unsigned long) xor_data);
 	}
 
-	if(!strncmp((char *) xor_data->plaintext_buf, query, BUFFER_LEN)){
+	if(!strncmp(query, (char *) xor_data->plaintext_buf, xor_data->buf_count)){
 		match = 1;
 	}
 

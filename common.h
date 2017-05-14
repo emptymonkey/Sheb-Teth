@@ -1,4 +1,6 @@
 
+#define _POSIX_C_SOURCE 199309L
+
 #include <errno.h>
 #include <error.h>
 #include <stdio.h>
@@ -20,7 +22,7 @@ int check_flag_1(char *query);
 // Obscured flag, anti-debug w/PTRACE_TRACEME.
 int check_flag_2(char *query);
 
-// Obscured flag, anti-debug w/breakpoint detection and false disassembly
+// Obscured flag, anti-debug w/fake breakpoints + SIGTERM handler generation of key material.
 int check_flag_3(char *query);
 
 // Obscured flag, anti-debug w/ptrace()d child process that constructs the flag.

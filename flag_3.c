@@ -6,8 +6,8 @@
 
 unsigned int elder_sign = 0;
 
-void trap(int dark_sign){
-	elder_sign += 379408146 + dark_sign;
+void trap(){
+	elder_sign += 379408151;
 }
 
 int check_flag_3(char *query){
@@ -26,8 +26,7 @@ int check_flag_3(char *query){
 		 And now for some abstraction of the key + homebrew debug checking...
 
 		 The elder_sign variable will need to be 2276448906 for this to work.
-			2276448906 = 6 * (379408146 + 5)
-			5 = dark_sign (SIGTERM)
+			2276448906 = 6 * 379408151
 
 			We set up six calls to the debugger. If no debugger is there, we will
 			receive SIGTRAP. The handler for SIGTRAP will increment the elder_sign.
