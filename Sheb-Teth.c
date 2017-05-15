@@ -15,7 +15,7 @@
 
 
 char *welcome_00 = "#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.";
-char *welcome_01 = ". @emptymonkey                                                      2017-03-10 #";
+char *welcome_01 = ". @emptymonkey            https://github.com/emptymonkey            2017-03-10 #";
 char *welcome_02 = "#                                                                              .";
 char *welcome_03 = ". Welcome to the LayerOne 2017 CTF \"Sheb-Teth\" RE challenge.                 #";
 char *welcome_04 = "# There are six flags. flag_0, flag_1, ..., flag_5.                            .";
@@ -93,9 +93,14 @@ int main(){
 		printf("flag 4: Confirmed!\n");
 		success = 1;
 
+/*
+*/
+
+/*
 	}else if(check_flag_5(input_buffer)){
 		printf("flag 5: Confirmed!\n");
 		success = 1;
+*/
 	}
 
 	if(success){

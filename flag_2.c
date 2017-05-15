@@ -16,14 +16,14 @@ int check_flag_2(char *query){
 	int fd;
 	int flag;
 
-	// kadishtu ylloig  ->  undersand my own mind
+	// kadishtu ylloig  ->  understand my own mind
 	char kadishtu_ylloig;
 	
 	/*
 		 Homebrew debugger check. Examine /proc/self/status for the TracerPid variable. If non-zero, we are in a debugger.
 		 No error checking here. If anything goes wrong... decend into madness.
 
-		 We will perform this check in a rather non-straightforward way.
+		 We will perform this check in a way that is not straight forward.
 	*/
 
 	fd = open("/proc/self/status", O_RDONLY);
