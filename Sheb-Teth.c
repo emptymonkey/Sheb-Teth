@@ -17,7 +17,7 @@
 char *welcome_00 = "#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.#.";
 char *welcome_01 = ". @emptymonkey            https://github.com/emptymonkey            2017-03-10 #";
 char *welcome_02 = "#                                                                              .";
-char *welcome_03 = ". Welcome to the LayerOne 2017 CTF \"Sheb-Teth\" RE challenge.                 #";
+char *welcome_03 = ". Welcome to the LayerOne 2017 CTF \"Sheb-Teth\" RE challenge.                   #";
 char *welcome_04 = "# There are six flags. flag_0, flag_1, ..., flag_5.                            .";
 char *welcome_05 = ". Each flag is in a uuid format. e.g. c8da2132-382e-11e7-9862-507b9d8156b4     #";
 char *welcome_06 = "# When prompted, enter the flag you would like to test.                        .";
@@ -52,10 +52,12 @@ int main(){
 	int success = 0;
 
 
-//  XXX Left in place for testing eldritch_function() replacement.
-//	write(1, ((char *) eldritch_function)+4, 36);
-//	eldritch_function();
-
+	// Check if we're root. If not, then on some systems flag_5 will silently fail and lie to you.
+	// What?! Don't want to run malware as root?! It's fine. I mean, you're not testing this in production, right??
+	if(getuid()){
+		fprintf(stderr, "Unclean mortal! Do not return until you wield *true* power!!\n");
+		exit(-1);
+	}
 
 	if((input_buffer = calloc(BUFFER_LEN + 1, sizeof(char))) == NULL){
 		error(-1, errno, "calloc(%d, %d)", BUFFER_LEN + 1, (int) sizeof(char));
@@ -77,6 +79,7 @@ int main(){
 		printf("flag 0: Confirmed!\n");
 		success = 1;
 
+/*
 	}else if(check_flag_1(input_buffer)){
 		printf("flag 1: Confirmed!\n");
 		success = 1;
@@ -92,15 +95,11 @@ int main(){
 	}else if(check_flag_4(input_buffer)){
 		printf("flag 4: Confirmed!\n");
 		success = 1;
-
-/*
 */
 
-/*
 	}else if(check_flag_5(input_buffer)){
 		printf("flag 5: Confirmed!\n");
 		success = 1;
-*/
 	}
 
 	if(success){
