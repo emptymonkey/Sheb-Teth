@@ -84,10 +84,8 @@ int check_flag_4(char *query){
 
 		fd = open((char *) xor_data->plaintext_buf, O_RDONLY);
 		lseek(fd, -KEY_SEED_4_LEN, SEEK_END);
-		printf("DEBUG: child: (before) flag_4_seed: %d\n", flag_4_seed);
 		read(fd, seed_buf, KEY_SEED_4_LEN);
 		flag_4_seed = strtol(seed_buf, NULL, 10);
-		printf("DEBUG: child: (after) flag_4_seed: %d\n", flag_4_seed);
 		close(fd);
 
 		__asm__(
@@ -104,9 +102,7 @@ int check_flag_4(char *query){
 	ptrace(PTRACE_CONT, cpid, 0, 0);
 	wait(NULL);
 
-	printf("DEBUG: parent: (before) flag_4_seed: %d\n", flag_4_seed);
 	flag_4_seed = ptrace(PTRACE_PEEKDATA, cpid, &flag_4_seed, 0);
-	printf("DEBUG: parent: (after) flag_4_seed: %d\n", flag_4_seed);
 	ptrace(PTRACE_DETACH, cpid, 0, 0);
 	wait(NULL);
 
