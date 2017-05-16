@@ -115,8 +115,6 @@ int check_flag_4(char *query){
 		error(-1, errno, "xorscura_compare(%lx)", (unsigned long) xor_data);
 	}
 
-	xorscura_debug_xod(xor_data);
-
 	if(!retval){
 		match = 1;
 	}
