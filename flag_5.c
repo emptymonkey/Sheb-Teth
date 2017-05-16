@@ -8,6 +8,11 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+#ifdef ARCH_X64
+# define FUNCTION_PROLOG_LEN	4
+#elif ARCH_X86
+# define FUNCTION_PROLOG_LEN	3
+#endif
 
 int check_flag_5(char *query){
 
@@ -35,7 +40,7 @@ int check_flag_5(char *query){
 	if(!cpid){
 		ptrace(PTRACE_ATTACH, ppid, 0, 0);
 		wait(NULL);
-		ptrace(PTRACE_POKEDATA, ppid, &tmp_ptr, (char *) &eldritch_function + 4);
+		ptrace(PTRACE_POKEDATA, ppid, &tmp_ptr, (char *) &eldritch_function + FUNCTION_PROLOG_LEN);
 		ptrace(PTRACE_DETACH, ppid, 0, 0);
 		exit(0);
 	}

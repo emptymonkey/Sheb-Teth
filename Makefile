@@ -1,4 +1,8 @@
 
+
+# ARCH_X64 or ARCH_X86 change the calculation of function prolog length.
+ARCH_DEF = ARCH_X64
+
 KEY_SEED_4 = 3132303430333230343200
 KEY_5 = 45c2fd0c3993705773660f7b67cf896994cd817514b5e30f55a7bb31c204d97f94f23633
 
@@ -40,7 +44,7 @@ flag_4.o: flag_4.c
 	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_4.o flag_4.c
 
 flag_5.o: flag_5.c
-	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_5.o flag_5.c
+	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -D$(ARCH_DEF) -c -o flag_5.o flag_5.c
 
 eldritch.o: eldritch.c
 	$(CC) $(CFLAGS) -c -o eldritch.o eldritch.c
