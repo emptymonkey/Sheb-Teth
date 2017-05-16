@@ -1,5 +1,5 @@
 
-KEY_4 = e4030e0a182c5a1880fc356fca008f207ff447360bc7af609063732f091af2557923743d
+KEY_SEED_4 = 3132303430333230343200
 KEY_5 = 45c2fd0c3993705773660f7b67cf896994cd817514b5e30f55a7bb31c204d97f94f23633
 
 CC = /usr/bin/cc
@@ -13,8 +13,7 @@ RM = /bin/rm
 MV = /bin/mv
 
 XORSCURA_DIR = ../xorscura
-PTRACE_DO_DIR = ../ptrace_do
-LIBS = -lxorscura -lptrace_do
+LIBS = -lxorscura
 
 OBJS = flag_0.o flag_1.o flag_2.o flag_3.o flag_4.o flag_5.o eldritch.o
 
@@ -22,8 +21,8 @@ all: Sheb-Teth
 
 Sheb-Teth: common.h Sheb-Teth.c $(OBJS) 
 	$(CC) $(CFLAGS) -c -o Sheb-Teth.o Sheb-Teth.c
-	$(CC) $(CFLAGS) -L$(XORSCURA_DIR) -L$(PTRACE_DO_DIR) Sheb-Teth.o $(OBJS) -o Sheb-Teth $(LIBS)
-	$(ECHO) -n $(KEY_4) | $(XXD) -p -r >>Sheb-Teth
+	$(CC) $(CFLAGS) -L$(XORSCURA_DIR) Sheb-Teth.o $(OBJS) -o Sheb-Teth $(LIBS)
+	$(ECHO) -n $(KEY_SEED_4) | $(XXD) -p -r >>Sheb-Teth
 
 flag_0.o: flag_0.c
 	$(CC) $(CFLAGS) -c -o flag_0.o flag_0.c
@@ -38,10 +37,10 @@ flag_3.o: flag_3.c
 	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_3.o flag_3.c
 
 flag_4.o: flag_4.c
-	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -I$(PTRACE_DO_DIR) -c -o flag_4.o flag_4.c
+	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_4.o flag_4.c
 
 flag_5.o: flag_5.c
-	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -I$(PTRACE_DO_DIR) -c -o flag_5.o flag_5.c
+	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_5.o flag_5.c
 
 eldritch.o: eldritch.c
 	$(CC) $(CFLAGS) -c -o eldritch.o eldritch.c

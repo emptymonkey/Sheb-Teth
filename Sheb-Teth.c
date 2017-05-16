@@ -79,7 +79,6 @@ int main(){
 		printf("flag 0: Confirmed!\n");
 		success = 1;
 
-/*
 	}else if(check_flag_1(input_buffer)){
 		printf("flag 1: Confirmed!\n");
 		success = 1;
@@ -95,7 +94,6 @@ int main(){
 	}else if(check_flag_4(input_buffer)){
 		printf("flag 4: Confirmed!\n");
 		success = 1;
-*/
 
 	}else if(check_flag_5(input_buffer)){
 		printf("flag 5: Confirmed!\n");
@@ -109,7 +107,6 @@ int main(){
 		printf("\n%s\n", bad_flag);
 		printf("%s\n", goodbye_fail);
 	}
-
 
 	return(0);
 }

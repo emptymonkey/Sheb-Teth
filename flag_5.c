@@ -1,11 +1,13 @@
 
 #include "common.h"
 #include "libxorscura.h"
-#include "libptrace_do.h"
 
+#include <sys/ptrace.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <fcntl.h>
+
 
 int check_flag_5(char *query){
 
