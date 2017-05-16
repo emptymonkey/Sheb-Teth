@@ -3,7 +3,7 @@ KEY_SEED_4 = 3132303430333230343200
 KEY_5 = 45c2fd0c3993705773660f7b67cf896994cd817514b5e30f55a7bb31c204d97f94f23633
 
 CC = /usr/bin/cc
-CFLAGS = -Wall -Wextra -std=c99 -pedantic -g
+CFLAGS = -Wall -Wextra -std=c99 -pedantic
 
 ECHO = /bin/echo
 XXD = /usr/bin/xxd
@@ -25,13 +25,13 @@ Sheb-Teth: common.h Sheb-Teth.c $(OBJS)
 	$(ECHO) -n $(KEY_SEED_4) | $(XXD) -p -r >>Sheb-Teth
 
 flag_0.o: flag_0.c
-	$(CC) $(CFLAGS) -c -o flag_0.o flag_0.c
+	$(CC) $(CFLAGS) -g -c -o flag_0.o flag_0.c
 
 flag_1.o: flag_1.c
-	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_1.o flag_1.c 
+	$(CC) $(CFLAGS) -g -I$(XORSCURA_DIR) -c -o flag_1.o flag_1.c 
 
 flag_2.o: flag_2.c
-	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_2.o flag_2.c
+	$(CC) $(CFLAGS) -g -I$(XORSCURA_DIR) -c -o flag_2.o flag_2.c
 
 flag_3.o: flag_3.c
 	$(CC) $(CFLAGS) -I$(XORSCURA_DIR) -c -o flag_3.o flag_3.c

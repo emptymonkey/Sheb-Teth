@@ -29,15 +29,13 @@ int check_flag_4(char *query){
 	int fd;
 	int match = 0;
   struct xod *xor_data;
-	int gppid, ppid, pid, cpid, sid;
+	int cpid;
 
 // Length of the seed string from the Makefile, including the null terminator.
 // We're using the string version of the flag_4_seed in the Makefile to deal with endianness issues / portability.
 #define KEY_SEED_4_LEN 11
 	char seed_buf[KEY_SEED_4_LEN];
 
-
-	gppid = getppid();
 
 	if((xor_data = (struct xod *) calloc(1, sizeof(struct xod))) == NULL){
 		error(-1, errno, "calloc(1, %d)", (int) sizeof(struct xod));
@@ -63,16 +61,6 @@ int check_flag_4(char *query){
 				"int3 \n\t"
 				);
 
-		sid = getsid(0);
-		ppid = getppid();
-		pid = getpid();
-
-		if(sid != gppid){
-			kill(gppid, SIGKILL);
-			kill(ppid, SIGKILL);
-			kill(pid, SIGKILL);
-		}
-
 		xor_data->buf_count = hidden_buff_len;
 		xor_data->seed = hidden_location_seed;
 		xor_data->ciphertext_buf = hidden_location_ciphertext;
@@ -80,7 +68,6 @@ int check_flag_4(char *query){
 		if(xorscura_decrypt(xor_data) == -1){
 			error(-1, errno, "xorscura_decrypt(%lx)", (unsigned long) xor_data);
 		}
-
 
 		fd = open((char *) xor_data->plaintext_buf, O_RDONLY);
 		lseek(fd, -KEY_SEED_4_LEN, SEEK_END);
@@ -91,7 +78,6 @@ int check_flag_4(char *query){
 		__asm__(
 				"int3 \n\t"
 				);
-
 
 		exit(0);
 	}
