@@ -34,6 +34,15 @@ int check_flag_5(char *query){
 
 	tmp_ptr = flag_5_key;
 
+	/*
+		 The key is stored in the .txt area of memory as the eldritch_function.
+		 The parent doesn't know this. The child does. The child will now connect to the
+		 parent and place the pointer to the key in the right place in memory. 
+
+		 If we are being debugged, the child will fail to connect and silently exit.
+		 In this failure mode, the parent will move forward with the fake key, doing the wrong thing.
+	 */
+
 	ppid = getpid();
 	cpid = fork();
 

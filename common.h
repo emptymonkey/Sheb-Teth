@@ -34,11 +34,6 @@ int check_flag_4(char *query);
 // Child points parent to flag material stored in the .text section of the runtime process.
 int check_flag_5(char *query);
 
-// This function is itself key material translated to assembly as though it were opcodes. May be interesting to use
-// nested C functions (GNU extension) to place this at the beginning of the check_flag_5() function. Could do 
-// interesting things to the static analysis tools.
-// Then at the start of check_flag_5() actual codepath, do an if statement that the compiler wont optimize out that
-// will never be true and call eldritch_function() if it is. e.g. if(*((&argc)++) == NULL)  which is in essence
-// if argv[0] is empty, which it shouldn't ever be, but compiler won't know this. 
+// This function is itself key material translated to assembly as though it were opcodes. 
 void eldritch_function();
 

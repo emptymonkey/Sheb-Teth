@@ -42,13 +42,7 @@ int check_flag_4(char *query){
 	}
 
 	/*
-		 In this scenario, the debugging will be frustrated because there is a child process that
-		 will be assisting us. IPC with the child will take place through ptrace. Further, the
-		 child will be responsible for the anti-debug check. If the child's grandparent isn't the 
-		 session leader, then we aren't being run out of a shell. We will assume we are being 
-		 debugged and kill the grandparent, parent, and then ourselves.
-
-		 Finally, the child will extract the key from dead space in our own elf binary. The parent
+		 Here the child will extract the key from dead space in our own elf binary. The parent
 		 will retreave the key with ptrace.
 	 */
 

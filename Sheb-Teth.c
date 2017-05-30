@@ -53,7 +53,8 @@ int main(){
 
 
 	// Check if we're root. If not, then on some systems flag_5 will silently fail and lie to you.
-	// What?! Don't want to run malware as root?! It's fine. I mean, you're not testing this in production, right??
+	// What?! Don't want to run malware as root?! It's fine. I mean, you *do* have an environment for 
+	// detonating malware, right? This isn't being run on a machine you rely upon, right??!
 	if(getuid()){
 		fprintf(stderr, "Unclean mortal! Do not return until you wield *true* power!!\n");
 		exit(-1);

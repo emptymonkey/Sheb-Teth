@@ -1,6 +1,6 @@
 
 
-# ARCH_X64 or ARCH_X86 change the calculation of function prolog length.
+# Set as ARCH_X64 or ARCH_X86 to change the calculation of function prolog length.
 ARCH_DEF = ARCH_X64
 
 KEY_SEED_4 = 3132303430333230343200
