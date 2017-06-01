@@ -28,7 +28,18 @@ int check_flag_2(char *query){
 
 	fd = open("/proc/self/status", O_RDONLY);
 
-	// Seven newlines til the TracerPid line.
+	// Six newlines til the TracerPid line.
+	// XXX BUG
+	// As correctly indentified by @iximeow, this is an off-by-one error.
+	// The TracerPid line is on the seventh line. This is 6 newlines from the start.
+	// I am leaving it in the original form that appeared in the CTF and only updating these comments.
+	/*
+	  I must have put a decimal point in the wrong place or something. 
+	  Shit! 
+	  I always do that. 
+	  I always mess up some mundane detail.
+	    - Michael Bolton, Office Space
+	*/
 	flag = 7;
 	while(flag){
 		read(fd, &kadishtu_ylloig, 1);
