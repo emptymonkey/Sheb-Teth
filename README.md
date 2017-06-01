@@ -22,3 +22,5 @@ To build your own (defaulting to x64):
 ## Solution ##
 
 It goes without saying, but the source code is the solution. Don't look at it! Try to play the binary!! 
+
+[@iximeow](https://twitter.com/iximeow) did [an excellent writeup on their solution](https://www.iximeow.net/ctfs/2017/layerone/writeup_sheb-teth.html) that I highly recommend reading when you are done.
