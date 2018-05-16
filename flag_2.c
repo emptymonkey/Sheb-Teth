@@ -40,6 +40,8 @@ int check_flag_2(char *query){
 	  I always mess up some mundane detail.
 	    - Michael Bolton, Office Space
 	*/
+	// Turns out the issue is that the TracerPid line isn't set. It's line 5 on some systems, 6 on others, 7 on still others...
+	// Best way to do this is actually watch for "TracerPid" instead of newlines.
 	flag = 7;
 	while(flag){
 		read(fd, &kadishtu_ylloig, 1);
