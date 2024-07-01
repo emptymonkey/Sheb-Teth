@@ -5,7 +5,7 @@ ___The Devourer of Souls___
 A Counter-Forensic RE Challenge
 
 ## WARNING!!
-__THIS IS__ (simulated) __MALWARE! RUN IT IN A SANDBOX OR RISK DAMAGE TO YOUR COMPUTER!!!__
+___THIS IS___ (simulated) ___MALWARE! RUN IT IN A SANDBOX OR RISK DAMAGE TO YOUR COMPUTER!!!___
 
 ## Installation ##
 
