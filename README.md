@@ -14,7 +14,7 @@ ___THIS IS___ (simulated) ___MALWARE! RUN IT IN A SANDBOX OR RISK DAMAGE TO YOUR
 	make
 
 ## History
-This was a challenge presented at the LayerOne 2017 CTF.
+An earlier version of _Sheb-Teth_ was a challenge presented at the LayerOne 2017 CTF.
 
 ## Solution ##
 It goes without saying, but the source code is the solution. Don't look at it! Try to play the binary!! 
