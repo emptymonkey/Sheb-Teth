@@ -6,7 +6,7 @@ ARCH_DEF = ARCH_X64
 KEY_SEED_4 = 3132303430333230343200
 KEY_5 = 45c2fd0c3993705773660f7b67cf896994cd817514b5e30f55a7bb31c204d97f94f23633
 
-CC = /usr/bin/cc
+CC = clang
 CFLAGS = -Wall -Wextra -std=c99 -pedantic
 
 ECHO = /bin/echo

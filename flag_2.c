@@ -4,6 +4,17 @@
 
 #include <sys/ptrace.h>
 
+// A bitmask that will match \n. It will match other things too, but that is fine in our case.
+// Not being a simple "if(cb == '\n')" is another obfuscation.
+#define NL_MASK 0x55
+
+// This value matches the 32 bit fnv1a hash of the string"TracerPid:\t0".
+// That string matches a process that is not being debugged.
+#define TRACER_PID_FNV1A_HASH 0x1c18b478
+
+// The clue in this challenge is that these values are well-known for being related to the fnv1a hash algorithm.
+#define FNV1A_OB 0x811C9DC5
+#define FNV1A_PRIME 0x01000193
 
 int check_flag_2(char *query){
 
@@ -14,62 +25,50 @@ int check_flag_2(char *query){
 	int match = 0;
 	struct xod *xor_data;
 	int fd;
-	int flag;
 
-	// kadishtu ylloig  ->  understand my own mind
-	char kadishtu_ylloig;
-	
+	// cb - character buffer
+	unsigned char cb = 0;
+
+	// ycthoth nglui hai - "The silence I see now"
+	// We are using the fnv1a hash to search, or "see",  the relevant line and confirm its value is 0, or "silent". 
+	unsigned int ycthoth_nglui_hai = FNV1A_OB;
+	// This is our choice for the 32 bit fnv1a prime number, or "first" silence.
+	// ynyth cthoth - "The first silence"
+	unsigned int ynyth_cthoth = FNV1A_PRIME;
+
 	/*
-		 Homebrew debugger check. Examine /proc/self/status for the TracerPid variable. If non-zero, we are in a debugger.
-		 No error checking here. If anything goes wrong... decend into madness.
-
-		 We will perform this check in a way that is not straight forward.
+		Homebrew debugger check. Examine /proc/self/status looking for evidence the TracerPid variable is 0. If it isn't, 
+		we are in a debugger. This check is performed in a way that is not straight forward.
 	*/
-
 	fd = open("/proc/self/status", O_RDONLY);
 
-	// Six newlines til the TracerPid line.
-	// XXX BUG
-	// As correctly indentified by @iximeow, this is an off-by-one error.
-	// The TracerPid line is on the seventh line. This is 6 newlines from the start.
-	// I am leaving it in the original form that appeared in the CTF and only updating these comments.
-	/*
-	  I must have put a decimal point in the wrong place or something. 
-	  Shit! 
-	  I always do that. 
-	  I always mess up some mundane detail.
-	    - Michael Bolton, Office Space
-	*/
-	// Turns out the issue is that the TracerPid line isn't set. It's line 5 on some systems, 6 on others, 7 on still others...
-	// Best way to do this is actually watch for "TracerPid" instead of newlines.
-	flag = 7;
-	while(flag){
-		read(fd, &kadishtu_ylloig, 1);
-		if(kadishtu_ylloig == '\n'){
-			flag--;
-		}
-	}
+	// Calculate the 32 bit fnv1a hash of each line, excluding the newline.
+	while(read(fd, &cb, 1)){
 
-	// Find the tab break.
-	flag = 1;
-	while(flag){
-		read(fd, &kadishtu_ylloig, 1);
-		if(kadishtu_ylloig == '\t'){
-			flag--;
-		}
-	}
+		// Masking cb with the NL_MASK will match more than \n, but that doesn't matter. The other characters aren't in the
+		// only line we care about, so improperly handling them just creates other hashes that won't match. So, this mask
+		// matches \n successfully when it needs to, allowing reasonable parsing of the file for our needs.
+		if(!(cb & NL_MASK)){
 
-	// Next character is the leading digit. This will only be nonzero if we are in a debugger.
-	// There are more chars to this digit, but the display is not zero left padded, so there won't
-	// ever be a leading zero unless the entire number itself is zero.
-	read(fd, &kadishtu_ylloig, 1);
+			// Repurpose the fnv1a prime to mark a successful match by setting it to 0.
+			// This "turns off" the hash, but without stopping the processing, so a successful match is slightly less noticible.
+			if(ycthoth_nglui_hai == TRACER_PID_FNV1A_HASH)
+				ynyth_cthoth = 0;
+
+			ycthoth_nglui_hai = FNV1A_OB;
+			continue;
+		}
+		ycthoth_nglui_hai ^= cb;
+		ycthoth_nglui_hai *= ynyth_cthoth;
+
+	}
 	close(fd);
 
-	// We are being debugged. Decend into madness.
-	if(atoi(&kadishtu_ylloig)){
+	// If the fnv1a prime is not 0, then we are being debugged.
+	// Decend into madness.
+	if(ynyth_cthoth){
 		eldritch_function();
 	}
-
 
 	if((xor_data = (struct xod *) calloc(1, sizeof(struct xod))) == NULL){
 		error(-1, errno, "calloc(1, %d)", (int) sizeof(struct xod));
