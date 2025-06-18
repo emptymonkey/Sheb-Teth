@@ -9,9 +9,10 @@ ___THIS IS___ (simulated) ___MALWARE! RUN IT IN A SANDBOX OR RISK DAMAGE TO YOUR
 
 ## Installation ##
 
+	git clone https://github.com/emptymonkey/xorscura
+	cd xorscura && make && cd ..
 	git clone https://github.com/emptymonkey/Sheb-Teth.git
-	cd Sheb-Teth
-	make
+	cd Sheb-Teth && make
 
 ## History
 An earlier version of _Sheb-Teth_ was a challenge presented at the LayerOne 2017 CTF.
